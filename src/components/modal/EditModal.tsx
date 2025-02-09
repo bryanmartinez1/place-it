@@ -82,20 +82,20 @@ export default function EditModal({
           </Upload>
         </div>
       )}
-      {componentType === "Title" && (
-        <label>
-          Title:
-          <input
-            type="text"
-            className="input-text"
-            value={tempTitle}
-            onChange={(e) => setTempTitle(e.target.value)}
-            placeholder="Title"
-          />
-        </label>
-      )}
-
       <div className="modal-content">
+        {componentType === "Title" && (
+          <label>
+            Title:
+            <input
+              type="text"
+              className="input-text"
+              value={tempTitle}
+              onChange={(e) => setTempTitle(e.target.value)}
+              placeholder="Title"
+            />
+          </label>
+        )}
+
         <label>
           Color:
           <input
