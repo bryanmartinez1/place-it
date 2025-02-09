@@ -4,6 +4,7 @@ import { useAppContext } from "../../App";
 import Circle from "../placeables/Circle";
 import Block from "../placeables/Block";
 import Image from "../placeables/Image";
+import Title from "../placeables/Title";
 
 function TopBar() {
   const { addElement, children } = useAppContext();
@@ -26,6 +27,9 @@ function TopBar() {
       case "Image":
         component = <Image id={String(newID)} componentType="Image" />;
         break;
+      case "Title":
+        component = <Title id={String(newID)} componentType="Title" />;
+        break;
       default:
         console.warn(`Unknown component type: ${ComponentType}`);
         component = <div id={String(newID)}>Invalid Component</div>;
@@ -40,6 +44,7 @@ function TopBar() {
         <button onClick={() => addElementTopBar("Circle")}>Circle</button>
         <button onClick={() => addElementTopBar("Block")}>Block</button>
         <button onClick={() => addElementTopBar("Image")}>Image</button>
+        <button onClick={() => addElementTopBar("Title")}>Title</button>
         <button onClick={() => console.log(children)}>Image</button>
       </div>
     </div>

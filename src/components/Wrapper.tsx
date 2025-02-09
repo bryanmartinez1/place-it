@@ -14,11 +14,12 @@ type WrapperProps = {
   componentType: string;
 };
 
-const Wrapper: React.FC<WrapperProps> = ({ id, placeable }) => {
+const Wrapper: React.FC<WrapperProps> = ({ id, placeable, componentType }) => {
   useDragger(id);
   const { addElement, children, setChildren } = useAppContext();
   const [backgroundColor, setBackgroundColor] = useState<string>("transparent");
   const [width, setWidth] = useState<number>(50);
+  const [title, setTitle] = useState<string>("Title");
   const [height, setHeight] = useState<number>(50);
   const [rotate, setRotate] = useState<number>(0);
   const [hasBorder, setBorder] = useState<boolean>(true);
@@ -51,7 +52,8 @@ const Wrapper: React.FC<WrapperProps> = ({ id, placeable }) => {
     height: number,
     rotate: number,
     hasBorder: boolean,
-    imageSrc: string
+    imageSrc: string,
+    title: string
   ) => {
     setBackgroundColor(color);
     setWidth(width);
@@ -59,6 +61,7 @@ const Wrapper: React.FC<WrapperProps> = ({ id, placeable }) => {
     setRotate(rotate);
     setBorder(hasBorder);
     setImageSrc(imageSrc);
+    setTitle(title);
     setIsEditing(false);
   };
 
@@ -75,7 +78,8 @@ const Wrapper: React.FC<WrapperProps> = ({ id, placeable }) => {
         initialHeight={height}
         initialRotation={rotate}
         initalHasBorder={hasBorder}
-        isImageComponent={isImageComponent}
+        initialTitle={title}
+        componentType={componentType}
         initialImageSrc={imageSrc}
         onSave={handleSave}
         onCancel={handleCancel}
@@ -84,6 +88,46 @@ const Wrapper: React.FC<WrapperProps> = ({ id, placeable }) => {
         }}
       />
     );
+  };
+
+  const renderElement = () => {
+    const commonStyles = {
+      width: `${width}px`,
+      height: `${height}px`,
+      backgroundColor: `${backgroundColor}`,
+      border: hasBorder ? "1px solid black" : "none",
+    };
+
+    switch (componentType) {
+      case "Title":
+        return (
+          <div
+            style={{
+              ...commonStyles,
+              overflow: "hidden",
+              whiteSpace: "nowrap",
+              textOverflow: "ellipsis",
+            }}
+          >
+            {title}
+          </div>
+        );
+      case "Text":
+        return <div style={commonStyles}>{title}</div>;
+      default:
+        return React.cloneElement(placeable, {
+          style: {
+            ...placeable.props.style,
+            ...commonStyles,
+            ...(isImageComponent && {
+              pointerEvents: "none",
+              userSelect: "none",
+              WebkitUserDrag: "none",
+            }),
+          },
+          src: placeable.type === "img" ? imageSrc : defaultIMG,
+        });
+    }
   };
 
   return (
@@ -96,21 +140,7 @@ const Wrapper: React.FC<WrapperProps> = ({ id, placeable }) => {
         transform: `rotate(${rotate}deg)`,
       }}
     >
-      {React.cloneElement(placeable, {
-        style: {
-          ...placeable.props.style,
-          width: `${width}px`,
-          height: `${height}px`,
-          backgroundColor: `${backgroundColor}`,
-          border: hasBorder ? "1px solid black" : "none",
-          ...(isImageComponent && {
-            pointerEvents: "none",
-            userSelect: "none",
-            WebkitUserDrag: "none",
-          }),
-        },
-        src: placeable.type === "img" ? imageSrc : defaultIMG,
-      })}
+      {renderElement()}
       <div className="wrapper-buttons">
         <button
           className="wrapper-button"

@@ -9,16 +9,18 @@ type EditModalProps = {
   initialRotation: number;
   initalHasBorder: boolean;
   initialImageSrc: string;
-  isImageComponent: boolean;
+  componentType: string;
   onSave: (
     color: string,
     width: number,
     height: number,
     rotate: number,
     hasBorder: boolean,
-    setImageSrc: string
+    setImageSrc: string,
+    title: string
   ) => void;
   onCancel: () => void;
+  initialTitle: string;
   style?: React.CSSProperties;
 };
 
@@ -29,13 +31,15 @@ export default function EditModal({
   initialRotation,
   initalHasBorder,
   initialImageSrc,
-  isImageComponent,
+  componentType,
+  initialTitle,
   style = {},
   onSave,
   onCancel,
 }: EditModalProps) {
   const [tempBackgroundColor, setTempBackgroundColor] =
     useState<string>(initialColor);
+  const [tempTitle, setTempTitle] = useState<string>(initialTitle);
   const [tempWidth, setTempWidth] = useState<number>(initialWidth);
   const [tempHeight, setTempHeight] = useState<number>(initialHeight);
   const [tempRotation, setTempRotation] = useState<number>(initialRotation);
@@ -59,13 +63,14 @@ export default function EditModal({
       tempHeight,
       tempRotation,
       tempHasBorder,
-      tempIMGSrc
+      tempIMGSrc,
+      tempTitle
     );
   };
 
   return (
     <div className="modal" style={style}>
-      {isImageComponent && (
+      {componentType === "Image" && (
         <div className="modal-upload">
           <Upload
             beforeUpload={(file) => {
@@ -76,6 +81,18 @@ export default function EditModal({
             <button>Upload Image</button>
           </Upload>
         </div>
+      )}
+      {componentType === "Title" && (
+        <label>
+          Title:
+          <input
+            type="text"
+            className="input-text"
+            value={tempTitle}
+            onChange={(e) => setTempTitle(e.target.value)}
+            placeholder="Title"
+          />
+        </label>
       )}
 
       <div className="modal-content">
