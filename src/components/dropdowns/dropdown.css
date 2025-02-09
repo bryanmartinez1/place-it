@@ -1,0 +1,27 @@
+.dropdown-container {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: block;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 90px;
+  background-color: white;
+  box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.8);
+  z-index: 1;
+  text-align: center;
+  border-radius: 5px;
+}
+
+.ddPara {
+  cursor: pointer;
+  box-sizing: border-box;
+  padding: 10px 5px;
+  border-radius: 5px;
+}
+.ddPara:hover {
+  background-color: #d3d3d3;
+}
